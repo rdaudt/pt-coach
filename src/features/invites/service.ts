@@ -46,6 +46,12 @@ export type InviteRepository = {
 export type RelationshipRepository = {
   findActiveByClientId(clientId: string): Promise<TrainerClientRecord | null>;
   activateLink(input: { trainerId: string; clientId: string }): Promise<TrainerClientRecord>;
+  activateLinkFromInvite?(input: {
+    inviteId: string;
+    trainerId: string;
+    clientId: string;
+    consumedAt: Date;
+  }): Promise<TrainerClientRecord>;
 };
 
 export type ProfileRepository = {
@@ -247,16 +253,19 @@ export class InviteService {
 
     const relationship =
       activeLink ??
-      (await this.deps.relationships.activateLink({
+      (await this.acceptInviteTransition({
+        inviteId: invite.id,
         trainerId: invite.trainer_id,
         clientId,
       }));
 
-    await this.deps.invites.consumeInvite({
-      inviteId: invite.id,
-      clientId,
-      consumedAt: this.now(),
-    });
+    if (activeLink) {
+      await this.deps.invites.consumeInvite({
+        inviteId: invite.id,
+        clientId,
+        consumedAt: this.now(),
+      });
+    }
 
     return { relationship, invite };
   }
@@ -290,6 +299,36 @@ export class InviteService {
         409,
       );
     }
+  }
+
+  private async acceptInviteTransition(input: {
+    inviteId: string;
+    trainerId: string;
+    clientId: string;
+  }): Promise<TrainerClientRecord> {
+    const consumedAt = this.now();
+
+    // Repository adapters should implement this for true DB-level atomicity.
+    if (this.deps.relationships.activateLinkFromInvite) {
+      return this.deps.relationships.activateLinkFromInvite({
+        inviteId: input.inviteId,
+        trainerId: input.trainerId,
+        clientId: input.clientId,
+        consumedAt,
+      });
+    }
+
+    // Fallback for non-transactional adapters used in local/dev scaffolding.
+    const relationship = await this.deps.relationships.activateLink({
+      trainerId: input.trainerId,
+      clientId: input.clientId,
+    });
+    await this.deps.invites.consumeInvite({
+      inviteId: input.inviteId,
+      clientId: input.clientId,
+      consumedAt,
+    });
+    return relationship;
   }
 }
 
