@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: Trainer can create an account with email and password.
-- [ ] **AUTH-02**: Client can create an account with email and password.
-- [ ] **AUTH-03**: User can sign in and stay signed in across browser refresh.
-- [ ] **AUTH-04**: User can sign out from any authenticated page.
+- [x] **AUTH-01**: Trainer can create an account with email and password.
+- [x] **AUTH-02**: Client can create an account with email and password.
+- [x] **AUTH-03**: User can sign in and stay signed in across browser refresh.
+- [x] **AUTH-04**: User can sign out from any authenticated page.
 
 ### Trainer-Client Relationship
 
@@ -97,10 +97,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | RELA-01 | Phase 1 | Pending |
 | RELA-02 | Phase 1 | Pending |
 | RELA-03 | Phase 1 | Pending |
