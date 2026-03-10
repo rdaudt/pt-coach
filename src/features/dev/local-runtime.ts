@@ -33,6 +33,7 @@ import {
   SubmissionQueries,
   getSubmissionQueriesOrThrow,
   registerSubmissionQueriesFactory,
+  type SubmissionHistoryRepository,
 } from "../submissions/queries";
 import { registerInviteEmailSender, type InviteEmailMessage } from "../../services/email/invite-template";
 
@@ -348,7 +349,9 @@ function buildInviteService(state: LocalRuntimeState): InviteService {
   });
 }
 
-function buildSubmissionRepository(state: LocalRuntimeState): SubmissionRepository {
+type SubmissionRuntimeRepository = SubmissionRepository & SubmissionHistoryRepository;
+
+function buildSubmissionRepository(state: LocalRuntimeState): SubmissionRuntimeRepository {
   return {
     async findByClientAndRequestId(clientId, requestId) {
       return (
