@@ -27,7 +27,7 @@ const exerciseLabelMap = new Map<ExerciseLabelKey, string>(
   EXERCISE_LABEL_OPTIONS.map((option) => [option.key, option.label]),
 );
 
-export function searchExerciseLabelOptions(query: string): typeof EXERCISE_LABEL_OPTIONS {
+export function searchExerciseLabelOptions(query: string): ReadonlyArray<(typeof EXERCISE_LABEL_OPTIONS)[number]> {
   const normalized = query.trim().toLowerCase();
   if (!normalized) {
     return EXERCISE_LABEL_OPTIONS;
@@ -136,4 +136,3 @@ export function getDurationWarningMetadata(durationSeconds?: number): Submission
     duration_seconds: durationSeconds,
   };
 }
-

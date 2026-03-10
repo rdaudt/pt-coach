@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -60,7 +60,7 @@ function isHistorySuccessResponse(payload: unknown): payload is HistorySuccessRe
   return response.status === "ok" && Array.isArray(response.history) && Boolean(response.page);
 }
 
-export default function ClientSubmissionsPage() {
+function ClientSubmissionsPageContent() {
   const searchParams = useSearchParams();
   const notice = searchParams.get("notice") ?? undefined;
 
@@ -174,5 +174,13 @@ export default function ClientSubmissionsPage() {
         <button type="submit">Sign out</button>
       </form>
     </main>
+  );
+}
+
+export default function ClientSubmissionsPage() {
+  return (
+    <Suspense fallback={<main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>Loading...</main>}>
+      <ClientSubmissionsPageContent />
+    </Suspense>
   );
 }
