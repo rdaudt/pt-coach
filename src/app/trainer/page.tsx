@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 
+import { RoleNoticeBanner } from "../../components/navigation/RoleNoticeBanner";
 import { ActiveClientsTable } from "../../components/relationship/ActiveClientsTable";
 import { PendingInviteState } from "../../components/relationship/PendingInviteState";
 import {
@@ -16,7 +17,14 @@ function getRoleFromCookie(value: string | undefined): AppRole | null {
   return null;
 }
 
-export default async function TrainerLandingPage() {
+type TrainerLandingPageProps = {
+  searchParams?: {
+    notice?: string;
+  };
+};
+
+export default async function TrainerLandingPage({ searchParams }: TrainerLandingPageProps) {
+  const notice = searchParams?.notice;
   const cookieStore = await cookies();
   const role = getRoleFromCookie(cookieStore.get("pt_role")?.value);
   const userId = cookieStore.get("pt_user_id")?.value;
@@ -25,6 +33,7 @@ export default async function TrainerLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Trainer Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>Sign in as a trainer to view your client overview.</p>
       </main>
     );
@@ -34,6 +43,7 @@ export default async function TrainerLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Trainer Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>This page is only available to trainer accounts.</p>
       </main>
     );
@@ -47,6 +57,7 @@ export default async function TrainerLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Trainer Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>Active clients: {metrics.active_clients_count}</p>
         <p>Pending invites: {metrics.pending_invites_count}</p>
 
@@ -61,6 +72,7 @@ export default async function TrainerLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Trainer Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>{message}</p>
       </main>
     );

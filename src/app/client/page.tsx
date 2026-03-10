@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 
+import { RoleNoticeBanner } from "../../components/navigation/RoleNoticeBanner";
 import {
   getRelationshipQueriesOrThrow,
   RelationshipQueriesError,
@@ -15,7 +16,14 @@ function getRoleFromCookie(value: string | undefined): AppRole | null {
   return null;
 }
 
-export default async function ClientLandingPage() {
+type ClientLandingPageProps = {
+  searchParams?: {
+    notice?: string;
+  };
+};
+
+export default async function ClientLandingPage({ searchParams }: ClientLandingPageProps) {
+  const notice = searchParams?.notice;
   const cookieStore = await cookies();
   const role = getRoleFromCookie(cookieStore.get("pt_role")?.value);
   const userId = cookieStore.get("pt_user_id")?.value;
@@ -24,6 +32,7 @@ export default async function ClientLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Client Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>Sign in as a client to view your coach connection status.</p>
       </main>
     );
@@ -33,6 +42,7 @@ export default async function ClientLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Client Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>This page is only available to client accounts.</p>
       </main>
     );
@@ -46,6 +56,7 @@ export default async function ClientLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Client Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <h2>{state.title}</h2>
         <p>{state.detail}</p>
         <p>
@@ -60,6 +71,7 @@ export default async function ClientLandingPage() {
     return (
       <main style={{ maxWidth: 760, margin: "2rem auto", padding: "0 1rem" }}>
         <h1>Client Dashboard</h1>
+        <RoleNoticeBanner notice={notice} />
         <p>{message}</p>
       </main>
     );
