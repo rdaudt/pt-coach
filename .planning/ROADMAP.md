@@ -1,4 +1,4 @@
-# Roadmap: Video Coaching Portal
+﻿# Roadmap: Video Coaching Portal
 
 ## Overview
 
@@ -13,7 +13,7 @@ This roadmap delivers the full trainer-client video feedback loop in dependency 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Identity and Coaching Relationships** - Trainers and clients can authenticate and form one-to-one coaching links. (completed 2026-03-10)
-- [x] **Phase 2: Client Video Submission Pipeline** - Clients can submit labeled training videos and track submission status/history. (completed 2026-03-10)
+- [ ] **Phase 2: Client Video Submission Pipeline** - Clients can submit labeled training videos and track submission status/history. (in progress 2026-03-10)
 - [ ] **Phase 3: Trainer Review and Feedback Authoring** - Trainers can review submissions and send structured feedback with voice notes.
 - [ ] **Phase 4: Client Feedback Experience and Brand Setup** - Clients can consume feedback, and trainers can configure visible brand identity.
 - [ ] **Phase 5: Branded Notification Delivery** - Upload/feedback emails are reliable, idempotent, and branded consistently.
@@ -40,7 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Client must select an exercise label during submission and can add an optional note.
   3. Each submission persists with explicit workflow status values (`uploaded`, `ready_for_review`, `feedback_sent`).
   4. Client can open a history list containing only their own prior submissions.
-**Plans**: 3
+**Plans**: 5
 
 ### Phase 3: Trainer Review and Feedback Authoring
 **Goal**: Trainers can efficiently review incoming submissions and produce complete feedback packages.
@@ -83,7 +83,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Identity and Coaching Relationships | 3/3 | Complete    | 2026-03-10 |
-| 2. Client Video Submission Pipeline | 3/3 | Complete | 2026-03-10 |
+| 2. Client Video Submission Pipeline | 4/5 | In Progress | - |
 | 3. Trainer Review and Feedback Authoring | 0/TBD | Not started | - |
 | 4. Client Feedback Experience and Brand Setup | 0/TBD | Not started | - |
 | 5. Branded Notification Delivery | 0/TBD | Not started | - |
