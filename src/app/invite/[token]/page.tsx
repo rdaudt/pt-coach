@@ -1,18 +1,20 @@
 import Link from "next/link";
 
 type InvitePageProps = {
-  params: {
+  params: Promise<{
     token: string;
-  };
-  searchParams?: {
+  }>;
+  searchParams?: Promise<{
     notice?: string;
-  };
+  }>;
 };
 
-export default function InviteTokenPage({ params, searchParams }: InvitePageProps) {
-  const token = params.token;
+export default async function InviteTokenPage({ params, searchParams }: InvitePageProps) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const token = resolvedParams.token;
   const encodedToken = encodeURIComponent(token);
-  const notice = searchParams?.notice;
+  const notice = resolvedSearchParams?.notice;
 
   return (
     <main style={{ maxWidth: 560, margin: "2rem auto", padding: "0 1rem" }}>
