@@ -6,6 +6,8 @@ import { NextRequest } from "next/server";
 import { POST as createSubmission } from "../../app/api/submissions/create/route";
 import { GET as getSubmissionHistory } from "../../app/api/submissions/history/route";
 import {
+  getLocalSubmissionQueries,
+  getLocalSubmissionService,
   resetLocalRuntimeForTests,
   seedLocalRelationshipForTests,
   seedLocalSubmissionForTests,
@@ -122,5 +124,46 @@ describe("local runtime submission adapters", () => {
     expect(historyIds).toContain(clientOneRequestId);
     expect(historyIds).toContain("seeded-client-1");
     expect(historyIds).not.toContain(clientTwoRequestId);
+  });
+
+  it("keeps service and query adapters aligned for create plus owner-scoped history", async () => {
+    seedLocalSubmissionForTests({
+      requestId: "seeded-client-1",
+      clientId: "client-1",
+      trainerId: "trainer-1",
+      submittedAt: new Date("2026-03-01T00:00:00.000Z"),
+    });
+
+    const submissionService = getLocalSubmissionService();
+    const submissionQueries = getLocalSubmissionQueries();
+
+    const clientOneRequestId = randomUUID();
+    const createClientOneResult = await submissionService.createSubmission({
+      actor_id: "client-1",
+      actor_role: "client",
+      payload: createSubmissionPayload(clientOneRequestId),
+    });
+    expect(createClientOneResult.action).toBe("created");
+    expect(createClientOneResult.submission.status).toBe("ready_for_review");
+
+    const clientTwoRequestId = randomUUID();
+    const createClientTwoResult = await submissionService.createSubmission({
+      actor_id: "client-2",
+      actor_role: "client",
+      payload: createSubmissionPayload(clientTwoRequestId),
+    });
+    expect(createClientTwoResult.action).toBe("created");
+
+    const clientOneHistory = await submissionQueries.listClientHistory({
+      actor_id: "client-1",
+      actor_role: "client",
+      limit: 10,
+    });
+    const clientOneHistoryIds = clientOneHistory.submissions.map((entry) => entry.request_id);
+
+    expect(clientOneHistoryIds[0]).toBe(clientOneRequestId);
+    expect(clientOneHistoryIds).toContain("seeded-client-1");
+    expect(clientOneHistoryIds).not.toContain(clientTwoRequestId);
+    expect(clientOneHistory.submissions.every((entry) => entry.client_id === "client-1")).toBe(true);
   });
 });
