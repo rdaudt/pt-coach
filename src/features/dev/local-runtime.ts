@@ -21,6 +21,14 @@ import {
   type RelationshipReadRepository,
   type TrainerSummary,
 } from "../relationships/queries";
+import {
+  SubmissionRepositoryConflictError,
+  SubmissionService,
+  getSubmissionServiceOrThrow,
+  registerSubmissionServiceFactory,
+  type SubmissionRecord,
+  type SubmissionRepository,
+} from "../submissions/service";
 import { registerInviteEmailSender, type InviteEmailMessage } from "../../services/email/invite-template";
 
 type LocalUserRecord = {
@@ -44,11 +52,14 @@ type LocalRelationshipRecord = TrainerClientRecord & {
   updated_at: Date;
 };
 
+type LocalSubmissionRecord = SubmissionRecord;
+
 type LocalRuntimeState = {
   users: LocalUserRecord[];
   profiles: LocalProfileRecord[];
   invites: InviteRecord[];
   relationships: LocalRelationshipRecord[];
+  submissions: LocalSubmissionRecord[];
   sent_emails: InviteEmailMessage[];
 };
 
@@ -70,6 +81,7 @@ function getRuntimeState(): LocalRuntimeState {
       profiles: [],
       invites: [],
       relationships: [],
+      submissions: [],
       sent_emails: [],
     };
   }
@@ -331,6 +343,84 @@ function buildInviteService(state: LocalRuntimeState): InviteService {
   });
 }
 
+function buildSubmissionRepository(state: LocalRuntimeState): SubmissionRepository {
+  return {
+    async findByClientAndRequestId(clientId, requestId) {
+      return (
+        state.submissions.find((record) => record.client_id === clientId && record.request_id === requestId) ?? null
+      );
+    },
+
+    async findActiveTrainerIdForClient(clientId) {
+      const relationship = state.relationships.find(
+        (candidate) => candidate.client_id === clientId && candidate.status === "active",
+      );
+      return relationship?.trainer_id ?? null;
+    },
+
+    async create(input) {
+      const existing = state.submissions.find(
+        (record) => record.client_id === input.client_id && record.request_id === input.request_id,
+      );
+      if (existing) {
+        throw new SubmissionRepositoryConflictError("DUPLICATE_REQUEST", "Submission request already exists.");
+      }
+
+      const now = new Date();
+      const submission: LocalSubmissionRecord = {
+        id: randomUUID(),
+        request_id: input.request_id,
+        client_id: input.client_id,
+        trainer_id: input.trainer_id,
+        exercise_key: input.exercise_key,
+        exercise_label: input.exercise_label,
+        client_note: input.client_note,
+        file_name: input.file_name,
+        mime_type: input.mime_type,
+        file_size_bytes: input.file_size_bytes,
+        duration_seconds: input.duration_seconds,
+        status: input.status,
+        uploaded_at: input.uploaded_at,
+        submitted_at: input.submitted_at,
+        ready_for_review_at: null,
+        created_at: now,
+        updated_at: now,
+      };
+      state.submissions.push(submission);
+      return submission;
+    },
+
+    async updateStatus(input) {
+      const submission = state.submissions.find((record) => record.id === input.submissionId) ?? null;
+      if (!submission) {
+        throw new Error("SUBMISSION_NOT_FOUND");
+      }
+
+      submission.status = input.status;
+      submission.ready_for_review_at = input.transitionedAt;
+      submission.updated_at = input.transitionedAt;
+      return submission;
+    },
+
+    async listByClient(input) {
+      return state.submissions
+        .filter((record) => record.client_id === input.clientId)
+        .filter(
+          (record) =>
+            !input.cursorSubmittedAt || record.submitted_at.getTime() < input.cursorSubmittedAt.getTime(),
+        )
+        .sort((left, right) => right.submitted_at.getTime() - left.submitted_at.getTime())
+        .slice(0, input.limit);
+    },
+  };
+}
+
+function buildSubmissionService(state: LocalRuntimeState): SubmissionService {
+  return new SubmissionService({
+    repository: buildSubmissionRepository(state),
+  });
+}
+
 function buildInviteGuard(state: LocalRuntimeState): InviteGuard {
   return {
     ensureTokenUsable(token, email) {
@@ -439,6 +529,7 @@ export function ensureLocalRuntimeRegistered(): void {
 
   const state = getRuntimeState();
   registerInviteServiceFactory(() => buildInviteService(state));
+  registerSubmissionServiceFactory(() => buildSubmissionService(state));
   registerRelationshipQueriesFactory(
     () =>
       new RelationshipQueries({
@@ -469,4 +560,9 @@ export function getLocalProfileById(userId: string): InviteProfileRecord | null 
     email: profile.email,
     role: profile.role,
   };
+}
+
+export function getLocalSubmissionService(): SubmissionService {
+  ensureLocalRuntimeRegistered();
+  return getSubmissionServiceOrThrow();
 }
