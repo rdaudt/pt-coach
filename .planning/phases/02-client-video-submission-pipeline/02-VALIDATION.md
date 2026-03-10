@@ -1,9 +1,9 @@
 ---
 phase: 02
 slug: client-video-submission-pipeline
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: ready
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-10
 ---
 
@@ -49,10 +49,10 @@ created: 2026-03-10
 
 ## Wave 0 Requirements
 
-- [ ] `src/features/submissions/schemas.test.ts` - validation and label model coverage
-- [ ] `src/features/submissions/service.test.ts` - submission create/status transition coverage
-- [ ] `src/features/submissions/queries.test.ts` - client-only history scope and pagination coverage
-- [ ] `src/features/submissions/selectors.test.ts` - history row/view-state derivation coverage
+- [x] `src/features/submissions/schemas.test.ts` - validation and label model coverage
+- [x] `src/features/submissions/service.test.ts` - submission create/status transition coverage
+- [x] `src/features/submissions/queries.test.ts` - client-only history scope and pagination coverage
+- [x] `src/features/submissions/selectors.test.ts` - history row/view-state derivation coverage
 
 *If none: "Existing infrastructure covers all phase requirements."*
 
@@ -70,11 +70,11 @@ created: 2026-03-10
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 15s
 - [ ] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** ready
