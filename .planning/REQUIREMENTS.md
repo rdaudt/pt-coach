@@ -23,9 +23,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Video Submissions
 
 - [ ] **SUBM-01**: Client can upload a training video file from mobile or desktop browser.
-- [ ] **SUBM-02**: Client can select an exercise label when submitting a video.
-- [ ] **SUBM-03**: Client can add an optional note to a submission.
-- [ ] **SUBM-04**: System stores submission with explicit workflow status (`uploaded`, `ready_for_review`, `feedback_sent`).
+- [x] **SUBM-02**: Client can select an exercise label when submitting a video.
+- [x] **SUBM-03**: Client can add an optional note to a submission.
+- [x] **SUBM-04**: System stores submission with explicit workflow status (`uploaded`, `ready_for_review`, `feedback_sent`).
 - [ ] **SUBM-05**: Client can view their own submission history list.
 
 ### Trainer Review and Feedback
@@ -105,9 +105,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELA-02 | Phase 1 | Complete |
 | RELA-03 | Phase 1 | Complete |
 | SUBM-01 | Phase 2 | Pending |
-| SUBM-02 | Phase 2 | Pending |
-| SUBM-03 | Phase 2 | Pending |
-| SUBM-04 | Phase 2 | Pending |
+| SUBM-02 | Phase 2 | Complete |
+| SUBM-03 | Phase 2 | Complete |
+| SUBM-04 | Phase 2 | Complete |
 | SUBM-05 | Phase 2 | Pending |
 | REVW-01 | Phase 3 | Pending |
 | REVW-02 | Phase 3 | Pending |

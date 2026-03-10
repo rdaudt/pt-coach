@@ -40,7 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Client must select an exercise label during submission and can add an optional note.
   3. Each submission persists with explicit workflow status values (`uploaded`, `ready_for_review`, `feedback_sent`).
   4. Client can open a history list containing only their own prior submissions.
-**Plans**: TBD
+**Plans**: 3
 
 ### Phase 3: Trainer Review and Feedback Authoring
 **Goal**: Trainers can efficiently review incoming submissions and produce complete feedback packages.
@@ -83,7 +83,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Identity and Coaching Relationships | 3/3 | Complete    | 2026-03-10 |
-| 2. Client Video Submission Pipeline | 0/TBD | Not started | - |
+| 2. Client Video Submission Pipeline | 1/3 | In Progress | - |
 | 3. Trainer Review and Feedback Authoring | 0/TBD | Not started | - |
 | 4. Client Feedback Experience and Brand Setup | 0/TBD | Not started | - |
 | 5. Branded Notification Delivery | 0/TBD | Not started | - |

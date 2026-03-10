@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-10T05:19:37.602Z"
-last_activity: 2026-03-10 - Phase 1 completed and transitioned to Phase 2.
+status: executing
+stopped_at: Completed 02-client-video-submission-pipeline-01-PLAN.md
+last_updated: "2026-03-10T05:48:37.166Z"
+last_activity: 2026-03-10 - Completed Phase 2 Plan 01 submission domain contracts and runtime adapters.
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 20
+  total_plans: 6
+  completed_plans: 4
+  percent: 67
 ---
 
 # Project State
@@ -26,33 +26,35 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 2 of 5 (Client Video Submission Pipeline)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-10 - Phase 1 completed and transitioned to Phase 2.
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-03-10 - Completed Phase 2 Plan 01 submission domain contracts and runtime adapters.
 
-Progress: [==--------] 20%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 8 min
-- Total execution time: 0.4 hours
+- Total plans completed: 4
+- Average duration: 7.5 min
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 24 min | 8 min |
+| 02 | 1 | 6 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 15min, 7min, 2min
-- Trend: Improving
+- Last 5 plans: 15min, 7min, 2min, 6min
+- Trend: Stable
 
 *Updated after each plan completion*
 | Phase 01 P01 | 15min | 3 tasks | 9 files |
 | Phase 01 P02 | 7min | 3 tasks | 8 files |
 | Phase 01 P03 | 2min | 3 tasks | 7 files |
+| Phase 02-client-video-submission-pipeline P01 | 6min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -72,6 +74,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Relationship reads and UI selectors were split - Keeps role-aware query logic separate from presentation state mapping for maintainability.
 - [Phase 01]: Landing pages consume shared relationship components - Ensures trainer/client surfaces stay consistent as relationship UI expands in later phases.
 - [Phase 01]: Role redirect notices are dismissible and URL-scoped - Prevents stale permission notices from persisting across unrelated navigation sessions.
+- [Phase 02]: Submission lifecycle remains server-owned: uploaded persistence then ready_for_review transition.
+- [Phase 02]: Submission create contracts require request_id UUID for duplicate/in-flight deduplication.
+- [Phase 02]: Local runtime now registers a submission service factory backed by in-memory adapters.
 
 ### Pending Todos
 
@@ -85,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T05:19:37.583Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-client-video-submission-pipeline/02-CONTEXT.md
+Last session: 2026-03-10T05:48:30.000Z
+Stopped at: Completed 02-client-video-submission-pipeline-01-PLAN.md
+Resume file: .planning/phases/02-client-video-submission-pipeline/02-01-PLAN.md
