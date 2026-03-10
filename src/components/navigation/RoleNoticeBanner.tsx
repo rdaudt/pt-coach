@@ -2,7 +2,13 @@
 
 import { useMemo, useState } from "react";
 
-type RoleNoticeToken = "permission" | "auth_required";
+type RoleNoticeToken =
+  | "permission"
+  | "auth_required"
+  | "invite_sent"
+  | "invite_resent"
+  | "invite_accepted"
+  | "invite_error";
 
 type RoleNoticeBannerProps = {
   notice?: string;
@@ -17,10 +23,33 @@ const NOTICE_COPY: Record<RoleNoticeToken, { title: string; detail: string }> = 
     title: "Sign in required",
     detail: "You need to sign in before opening trainer or client pages.",
   },
+  invite_sent: {
+    title: "Invite sent",
+    detail: "Client invite was sent successfully.",
+  },
+  invite_resent: {
+    title: "Invite resent",
+    detail: "Client invite was refreshed and resent.",
+  },
+  invite_accepted: {
+    title: "Invite accepted",
+    detail: "Your coaching relationship is now active.",
+  },
+  invite_error: {
+    title: "Invite action failed",
+    detail: "The last invite action failed. Check details and try again.",
+  },
 };
 
 function normalizeNotice(notice?: string): RoleNoticeToken | null {
-  if (notice === "permission" || notice === "auth_required") {
+  if (
+    notice === "permission" ||
+    notice === "auth_required" ||
+    notice === "invite_sent" ||
+    notice === "invite_resent" ||
+    notice === "invite_accepted" ||
+    notice === "invite_error"
+  ) {
     return notice;
   }
   return null;

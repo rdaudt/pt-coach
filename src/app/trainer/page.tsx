@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { RoleNoticeBanner } from "../../components/navigation/RoleNoticeBanner";
 import { ActiveClientsTable } from "../../components/relationship/ActiveClientsTable";
 import { PendingInviteState } from "../../components/relationship/PendingInviteState";
+import { ensureLocalRuntimeRegistered } from "../../features/dev/local-runtime";
 import {
   getRelationshipQueriesOrThrow,
   RelationshipQueriesError,
@@ -18,13 +19,15 @@ function getRoleFromCookie(value: string | undefined): AppRole | null {
 }
 
 type TrainerLandingPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     notice?: string;
-  };
+  }>;
 };
 
 export default async function TrainerLandingPage({ searchParams }: TrainerLandingPageProps) {
-  const notice = searchParams?.notice;
+  ensureLocalRuntimeRegistered();
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const notice = resolvedSearchParams?.notice;
   const cookieStore = await cookies();
   const role = getRoleFromCookie(cookieStore.get("pt_role")?.value);
   const userId = cookieStore.get("pt_user_id")?.value;
@@ -35,6 +38,9 @@ export default async function TrainerLandingPage({ searchParams }: TrainerLandin
         <h1>Trainer Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>Sign in as a trainer to view your client overview.</p>
+        <p>
+          <a href="/signin">Go to sign in</a>
+        </p>
       </main>
     );
   }
@@ -45,6 +51,9 @@ export default async function TrainerLandingPage({ searchParams }: TrainerLandin
         <h1>Trainer Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>This page is only available to trainer accounts.</p>
+        <form method="post" action="/api/auth/signout">
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   }
@@ -63,6 +72,28 @@ export default async function TrainerLandingPage({ searchParams }: TrainerLandin
 
         <ActiveClientsTable clients={snapshot.active_clients} />
         <PendingInviteState invites={snapshot.pending_invites} />
+
+        <section style={{ marginTop: "1.5rem" }}>
+          <h2>Send Invite</h2>
+          <form method="post" action="/api/invites/send">
+            <label htmlFor="send_client_email">Client Email</label>
+            <input id="send_client_email" name="client_email" type="email" required />
+            <button type="submit">Send invite</button>
+          </form>
+        </section>
+
+        <section style={{ marginTop: "1.5rem" }}>
+          <h2>Resend Invite</h2>
+          <form method="post" action="/api/invites/resend">
+            <label htmlFor="resend_client_email">Client Email</label>
+            <input id="resend_client_email" name="client_email" type="email" required />
+            <button type="submit">Resend invite</button>
+          </form>
+        </section>
+
+        <form method="post" action="/api/auth/signout" style={{ marginTop: "1.5rem" }}>
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   } catch (error) {
@@ -74,6 +105,9 @@ export default async function TrainerLandingPage({ searchParams }: TrainerLandin
         <h1>Trainer Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>{message}</p>
+        <form method="post" action="/api/auth/signout">
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   }

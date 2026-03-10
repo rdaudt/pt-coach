@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 
 import { RoleNoticeBanner } from "../../components/navigation/RoleNoticeBanner";
+import { ensureLocalRuntimeRegistered } from "../../features/dev/local-runtime";
 import {
   getRelationshipQueriesOrThrow,
   RelationshipQueriesError,
@@ -17,13 +18,15 @@ function getRoleFromCookie(value: string | undefined): AppRole | null {
 }
 
 type ClientLandingPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     notice?: string;
-  };
+  }>;
 };
 
 export default async function ClientLandingPage({ searchParams }: ClientLandingPageProps) {
-  const notice = searchParams?.notice;
+  ensureLocalRuntimeRegistered();
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const notice = resolvedSearchParams?.notice;
   const cookieStore = await cookies();
   const role = getRoleFromCookie(cookieStore.get("pt_role")?.value);
   const userId = cookieStore.get("pt_user_id")?.value;
@@ -34,6 +37,9 @@ export default async function ClientLandingPage({ searchParams }: ClientLandingP
         <h1>Client Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>Sign in as a client to view your coach connection status.</p>
+        <p>
+          <Link href="/signin">Go to sign in</Link>
+        </p>
       </main>
     );
   }
@@ -44,6 +50,9 @@ export default async function ClientLandingPage({ searchParams }: ClientLandingP
         <h1>Client Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>This page is only available to client accounts.</p>
+        <form method="post" action="/api/auth/signout">
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   }
@@ -62,6 +71,9 @@ export default async function ClientLandingPage({ searchParams }: ClientLandingP
         <p>
           <Link href={state.action_href}>{state.action_label}</Link>
         </p>
+        <form method="post" action="/api/auth/signout" style={{ marginTop: "1.5rem" }}>
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   } catch (error) {
@@ -73,6 +85,9 @@ export default async function ClientLandingPage({ searchParams }: ClientLandingP
         <h1>Client Dashboard</h1>
         <RoleNoticeBanner notice={notice} />
         <p>{message}</p>
+        <form method="post" action="/api/auth/signout">
+          <button type="submit">Sign out</button>
+        </form>
       </main>
     );
   }

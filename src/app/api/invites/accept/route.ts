@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ZodError } from "zod";
 
+import { ensureLocalRuntimeRegistered } from "../../../../features/dev/local-runtime";
 import {
   getInviteServiceOrThrow,
   InviteServiceError,
@@ -50,15 +51,27 @@ function jsonError(status: number, code: string, message: string) {
   return NextResponse.json({ error: { code, message } }, { status });
 }
 
+function isFormSubmission(request: NextRequest): boolean {
+  const contentType = request.headers.get("content-type") ?? "";
+  return contentType.includes("application/x-www-form-urlencoded") || contentType.includes("multipart/form-data");
+}
+
 export async function POST(request: NextRequest) {
+  ensureLocalRuntimeRegistered();
+  const fromForm = isFormSubmission(request);
   const actor = getAuthenticatedActor(request);
 
   try {
     const payload = await getPayload(request);
+    const inviteToken = typeof payload.invite_token === "string" ? payload.invite_token : "";
+    const encodedToken = encodeURIComponent(inviteToken);
 
     if (!actor) {
-      const inviteToken = typeof payload.invite_token === "string" ? payload.invite_token : "";
-      const encodedToken = encodeURIComponent(inviteToken);
+      if (fromForm) {
+        return NextResponse.redirect(new URL(`/signin?error=auth_required&invite_token=${encodedToken}`, request.url), {
+          status: 303,
+        });
+      }
       return NextResponse.json(
         {
           error: {
@@ -75,11 +88,20 @@ export async function POST(request: NextRequest) {
     }
 
     if (actor.role !== "client") {
+      if (fromForm) {
+        return NextResponse.redirect(new URL(`/invite/${encodedToken}?notice=invite_error`, request.url), {
+          status: 303,
+        });
+      }
       return jsonError(403, "FORBIDDEN_ROLE", "Only client accounts can accept trainer invites.");
     }
 
     const inviteService = getInviteServiceOrThrow();
     const result = await inviteService.acceptInvite(actor.userId, payload);
+
+    if (fromForm) {
+      return NextResponse.redirect(new URL("/client?notice=invite_accepted", request.url), { status: 303 });
+    }
 
     return NextResponse.json({
       status: "ok",
@@ -96,13 +118,22 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     if (error instanceof ZodError) {
+      if (fromForm) {
+        return NextResponse.redirect(new URL("/client?notice=invite_error", request.url), { status: 303 });
+      }
       return jsonError(400, "INVALID_INPUT", "Invite accept payload is invalid.");
     }
 
     if (error instanceof InviteServiceError) {
+      if (fromForm) {
+        return NextResponse.redirect(new URL("/client?notice=invite_error", request.url), { status: 303 });
+      }
       return jsonError(error.httpStatus, error.code, error.message);
     }
 
+    if (fromForm) {
+      return NextResponse.redirect(new URL("/client?notice=invite_error", request.url), { status: 303 });
+    }
     return jsonError(500, "INTERNAL_ERROR", "Unexpected invite accept error.");
   }
 }
