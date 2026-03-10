@@ -16,6 +16,7 @@ describe("relationship selectors", () => {
 
     expect(state.status).toBe("active");
     expect(state.detail).toContain("Coach Alex");
+    expect(state.action_href).toBe("/client/submissions");
   });
 
   it("derives trainer overview metrics", () => {

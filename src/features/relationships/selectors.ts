@@ -1,5 +1,7 @@
 import type { ClientConnectionResult, TrainerDashboardResult } from "./queries";
 
+export const CLIENT_SUBMISSIONS_ROUTE = "/client/submissions";
+
 export type ClientConnectionUIState = {
   status: "active" | "pending" | "unlinked";
   title: string;
@@ -15,7 +17,7 @@ export function deriveClientConnectionState(connection: ClientConnectionResult):
       title: "Coach connected",
       detail: `You are linked to ${connection.trainer.display_name}.`,
       action_label: "View submission dashboard",
-      action_href: "/client/submissions",
+      action_href: CLIENT_SUBMISSIONS_ROUTE,
     };
   }
 
