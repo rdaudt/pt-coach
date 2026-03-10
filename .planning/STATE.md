@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-03-10T02:05:45.237Z"
-last_activity: 2026-03-09 - Completed Plan 01-02 invite lifecycle implementation.
+status: planning
+stopped_at: Completed Phase 1 execution
+last_updated: "2026-03-10T02:17:03.477Z"
+last_activity: 2026-03-10 - Phase 1 completed and transitioned to Phase 2.
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 20
 ---
 
 # Project State
@@ -21,37 +21,38 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** Trainers can deliver clear, structured video feedback quickly, so the trainer-client coaching loop becomes a repeatable habit.
-**Current focus:** Phase 1 - Identity and Coaching Relationships
+**Current focus:** Phase 2 - Client Video Submission Pipeline
 
 ## Current Position
 
-Phase: 1 of 5 (Identity and Coaching Relationships)
-Plan: 2 of 3 in current phase
-Status: Executing next plan
-Last activity: 2026-03-09 - Completed Plan 01-02 invite lifecycle implementation.
+Phase: 2 of 5 (Client Video Submission Pipeline)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-03-10 - Phase 1 completed and transitioned to Phase 2.
 
-Progress: [¦¦¦¦¦¦¦¦¦¦] 67%
+Progress: [==--------] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 11 min
+- Total plans completed: 3
+- Average duration: 8 min
 - Total execution time: 0.4 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01 | 2 | 22 min | 11 min |
+| 01 | 3 | 24 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 15min, 7min
+- Last 5 plans: 15min, 7min, 2min
 - Trend: Improving
 
 *Updated after each plan completion*
 | Phase 01 P01 | 15min | 3 tasks | 9 files |
 | Phase 01 P02 | 7min | 3 tasks | 8 files |
+| Phase 01 P03 | 2min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Invite resend refreshes one pending record - Prevents duplicate active invite rows while extending expiry and rotating token.
 - [Phase 01]: Invite service keeps business rules in repository adapters - Supports Supabase transactional implementations while keeping API handlers thin and deterministic.
 - [Phase 01]: Invite acceptance endpoint supports JSON and form payloads - Allows direct submit from guided invite page and programmatic API clients with one contract.
+- [Phase 01]: Relationship reads and UI selectors were split - Keeps role-aware query logic separate from presentation state mapping for maintainability.
+- [Phase 01]: Landing pages consume shared relationship components - Ensures trainer/client surfaces stay consistent as relationship UI expands in later phases.
+- [Phase 01]: Role redirect notices are dismissible and URL-scoped - Prevents stale permission notices from persisting across unrelated navigation sessions.
 
 ### Pending Todos
 
@@ -81,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T02:05:39.140Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-03-10T02:16:14.985Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
