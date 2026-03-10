@@ -12,6 +12,7 @@ export type PendingInviteRecord = {
   client_email: string;
   expires_at: Date;
   sent_at: Date;
+  invite_token?: string;
 };
 
 export type TrainerSummary = {

@@ -476,6 +476,7 @@ function buildRelationshipReadRepository(state: LocalRuntimeState): Relationship
         client_email: invite.client_email,
         expires_at: invite.expires_at,
         sent_at: invite.created_at,
+        invite_token: invite.invite_token,
       }));
       mapped.sort((left, right) => right.sent_at.getTime() - left.sent_at.getTime());
       return mapped;
