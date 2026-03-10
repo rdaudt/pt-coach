@@ -29,6 +29,11 @@ import {
   type SubmissionRecord,
   type SubmissionRepository,
 } from "../submissions/service";
+import {
+  SubmissionQueries,
+  getSubmissionQueriesOrThrow,
+  registerSubmissionQueriesFactory,
+} from "../submissions/queries";
 import { registerInviteEmailSender, type InviteEmailMessage } from "../../services/email/invite-template";
 
 type LocalUserRecord = {
@@ -421,6 +426,12 @@ function buildSubmissionService(state: LocalRuntimeState): SubmissionService {
   });
 }
 
+function buildSubmissionQueries(state: LocalRuntimeState): SubmissionQueries {
+  return new SubmissionQueries({
+    repository: buildSubmissionRepository(state),
+  });
+}
+
 function buildInviteGuard(state: LocalRuntimeState): InviteGuard {
   return {
     ensureTokenUsable(token, email) {
@@ -530,6 +541,7 @@ export function ensureLocalRuntimeRegistered(): void {
   const state = getRuntimeState();
   registerInviteServiceFactory(() => buildInviteService(state));
   registerSubmissionServiceFactory(() => buildSubmissionService(state));
+  registerSubmissionQueriesFactory(() => buildSubmissionQueries(state));
   registerRelationshipQueriesFactory(
     () =>
       new RelationshipQueries({
@@ -565,4 +577,73 @@ export function getLocalProfileById(userId: string): InviteProfileRecord | null 
 export function getLocalSubmissionService(): SubmissionService {
   ensureLocalRuntimeRegistered();
   return getSubmissionServiceOrThrow();
+}
+
+export function getLocalSubmissionQueries(): SubmissionQueries {
+  ensureLocalRuntimeRegistered();
+  return getSubmissionQueriesOrThrow();
+}
+
+export function resetLocalRuntimeForTests(): void {
+  runtimeRegistered = false;
+  globalThis.__ptCoachLocalRuntimeState = undefined;
+}
+
+export function seedLocalRelationshipForTests(input: {
+  trainerId: string;
+  clientId: string;
+  status?: TrainerClientRecord["status"];
+  linkedAt?: Date;
+}): LocalRelationshipRecord {
+  const state = getRuntimeState();
+  const now = input.linkedAt ?? new Date();
+  const relationship: LocalRelationshipRecord = {
+    id: randomUUID(),
+    trainer_id: input.trainerId,
+    client_id: input.clientId,
+    status: input.status ?? "active",
+    linked_at: now,
+    updated_at: now,
+  };
+  state.relationships.push(relationship);
+  return relationship;
+}
+
+export function seedLocalSubmissionForTests(input: {
+  requestId?: string;
+  clientId: string;
+  trainerId: string;
+  exerciseKey?: SubmissionRecord["exercise_key"];
+  exerciseLabel?: string;
+  status?: SubmissionRecord["status"];
+  submittedAt?: Date;
+  durationSeconds?: number | null;
+  fileName?: string;
+  mimeType?: SubmissionRecord["mime_type"];
+  fileSizeBytes?: number;
+}): LocalSubmissionRecord {
+  const state = getRuntimeState();
+  const submittedAt = input.submittedAt ?? new Date();
+  const status = input.status ?? "ready_for_review";
+  const submission: LocalSubmissionRecord = {
+    id: randomUUID(),
+    request_id: input.requestId ?? randomUUID(),
+    client_id: input.clientId,
+    trainer_id: input.trainerId,
+    exercise_key: input.exerciseKey ?? "squat",
+    exercise_label: input.exerciseLabel ?? "Squat",
+    client_note: null,
+    file_name: input.fileName ?? "seed.mp4",
+    mime_type: input.mimeType ?? "video/mp4",
+    file_size_bytes: input.fileSizeBytes ?? 100_000,
+    duration_seconds: input.durationSeconds ?? 120,
+    status,
+    uploaded_at: submittedAt,
+    submitted_at: submittedAt,
+    ready_for_review_at: status === "ready_for_review" ? submittedAt : null,
+    created_at: submittedAt,
+    updated_at: submittedAt,
+  };
+  state.submissions.push(submission);
+  return submission;
 }
