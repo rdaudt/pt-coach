@@ -16,8 +16,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Trainer-Client Relationship
 
-- [ ] **RELA-01**: Trainer can invite a client to join their coaching portal.
-- [ ] **RELA-02**: Invited client can accept invite and become linked to exactly one trainer.
+- [x] **RELA-01**: Trainer can invite a client to join their coaching portal.
+- [x] **RELA-02**: Invited client can accept invite and become linked to exactly one trainer.
 - [ ] **RELA-03**: Trainer can view their active client list.
 
 ### Video Submissions
@@ -101,8 +101,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| RELA-01 | Phase 1 | Pending |
-| RELA-02 | Phase 1 | Pending |
+| RELA-01 | Phase 1 | Complete |
+| RELA-02 | Phase 1 | Complete |
 | RELA-03 | Phase 1 | Pending |
 | SUBM-01 | Phase 2 | Pending |
 | SUBM-02 | Phase 2 | Pending |
