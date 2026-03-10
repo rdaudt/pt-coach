@@ -1,4 +1,4 @@
----
+﻿---
 phase: 02
 slug: client-video-submission-pipeline
 status: ready
@@ -38,10 +38,10 @@ created: 2026-03-10
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 02-01-01 | 01 | 1 | SUBM-01 | unit | `npm test -- src/features/submissions/schemas.test.ts` | ❌ W0 | ⬜ pending |
-| 02-01-02 | 01 | 1 | SUBM-02,SUBM-03 | unit | `npm test -- src/features/submissions/schemas.test.ts` | ❌ W0 | ⬜ pending |
-| 02-02-01 | 02 | 2 | SUBM-04 | unit/integration | `npm test -- src/features/submissions/service.test.ts` | ❌ W0 | ⬜ pending |
-| 02-03-01 | 03 | 3 | SUBM-05 | integration | `npm test -- src/features/submissions/queries.test.ts` | ❌ W0 | ⬜ pending |
+| 02-01-01 | 01 | 1 | SUBM-01 | unit | `npm test -- src/features/submissions/schemas.test.ts` | ✅ W0 | ⬜ pending |
+| 02-01-02 | 01 | 1 | SUBM-02,SUBM-03 | unit | `npm test -- src/features/submissions/schemas.test.ts` | ✅ W0 | ⬜ pending |
+| 02-02-01 | 02 | 2 | SUBM-04 | unit/integration | `npm test -- src/features/submissions/service.test.ts` | ✅ W0 | ⬜ pending |
+| 02-03-01 | 03 | 3 | SUBM-05 | integration | `npm test -- src/features/submissions/queries.test.ts` | ✅ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -73,8 +73,8 @@ created: 2026-03-10
 - [x] All tasks have `<automated>` verify or Wave 0 dependencies
 - [x] Sampling continuity: no 3 consecutive tasks without automated verify
 - [x] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 15s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] No watch-mode flags
+- [x] Feedback latency < 15s
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** ready
