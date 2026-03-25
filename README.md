@@ -38,3 +38,31 @@ Open `http://localhost:3000`.
 - Local runtime is in-memory (`src/features/dev/local-runtime.ts`).
 - Restarting the dev server resets users/invites/relationships.
 - Existing unit tests still run with `npm test`.
+
+## E2E UAT Automation (Playwright)
+
+Phase 2 UAT flow is automated in `tests/e2e/phase2-uat.spec.ts`.
+
+### One-time browser install
+
+```bash
+npm run test:e2e:install
+```
+
+### Run headless (default)
+
+```bash
+npm run test:e2e
+```
+
+### Run headed (watch browser)
+
+```bash
+npm run test:e2e:headed
+```
+
+### Interactive Playwright UI mode
+
+```bash
+npm run test:e2e:ui
+```
